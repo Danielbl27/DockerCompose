@@ -1,0 +1,33 @@
+# docker run -d --name mi-mongo --net mi-mysql-red -v mi-mysql-vol:/data/db mongo
+services:
+  mi-mongo:
+    image: mongo
+    container_name: mi-mongo 
+    stdin_open: true 
+    tty: true 
+    networks:
+      mi-red: 
+    volumes:
+      - mi-volumen:/data/db 
+
+# docker run -d --name mi-mongo-express --net mi-red -e ME_CONFIG_MONGODB_SERVER=mi-mongo -p 8081:88081 mongo-express
+  mi-mongo-express:
+    image: mongo-express
+    container_name: mi-mongo-express 
+    stdin_open: true 
+    tty: true 
+    networks:
+      mi-red:
+    ports:
+      - "8081:8081" 
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mi-mongo 
+    
+
+networks:
+  mi-red:
+    ipam:
+      driver: default 
+      
+volumes:
+  mi-volumen:
